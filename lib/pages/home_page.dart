@@ -4,6 +4,7 @@ import 'package:resto_app/components/my_description_box.dart';
 import 'package:resto_app/components/my_drawer.dart';
 import 'package:resto_app/components/my_silver_app_bar.dart';
 import 'package:resto_app/components/my_tab_bar.dart';
+import 'package:resto_app/models/food.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -12,14 +13,17 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin{
-
+class _HomePageState extends State<HomePage>
+    with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(
+      length: FoodCategory.values.length,
+      vsync: this,
+    );
   }
 
   @override
@@ -27,6 +31,27 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     _tabController.dispose();
     super.dispose();
   }
+
+  List<Food> _filterMenuCategory(FoodCategory category, List<Food> fullMenu) {
+    return fullMenu.where((food) => food.category == category).toList();
+  }
+
+  List<Widget> getFoodInThisCategory(List<Food> fullMenu) {
+    return FoodCategory.values.map((category) {
+      List<Food> categoryMenu = _filterMenuCategory(category, fullMenu);
+
+      return ListView.builder(
+        itemCount: categoryMenu.length,
+        physics: const NeverScrollableScrollPhysics(),
+        shrinkWrap:
+            true, // Important to prevent layout issues in nested scrolling
+        itemBuilder: (context, index) {
+          return ListTile(title: Text(categoryMenu[index].name));
+        },
+      );
+    }).toList(); // Convert Iterable<Widget> to List<Widget>
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,15 +84,23 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
           children: [
             ListView.builder(
               itemCount: 5,
-              itemBuilder: (context, index) => Text("First Tab Items")
+              itemBuilder: (context, index) => Text("First Tab Items"),
             ),
             ListView.builder(
               itemCount: 5,
-              itemBuilder: (context, index) => Text("Second Tab Items")
+              itemBuilder: (context, index) => Text("Second Tab Items"),
             ),
             ListView.builder(
               itemCount: 5,
-              itemBuilder: (context, index) => Text("Third Tab Items")
+              itemBuilder: (context, index) => Text("Third Tab Items"),
+            ),
+            ListView.builder(
+              itemCount: 5,
+              itemBuilder: (context, index) => Text("thourth Tab Items"),
+            ),
+            ListView.builder(
+              itemCount: 5,
+              itemBuilder: (context, index) => Text("fith Tab Items"),
             ),
           ],
         ),

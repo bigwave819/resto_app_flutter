@@ -1,15 +1,60 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:resto_app/components/my_quantity_selector.dart';
+import 'package:resto_app/models/cart_item.dart';
+import 'package:resto_app/models/restaurant.dart';
 
-class MyCartTile extends StatefulWidget {
-  const MyCartTile({super.key});
+class MyCartTile extends StatelessWidget {
+  final CartItem cartItem;
+  const MyCartTile({super.key, required this.cartItem});
 
-  @override
-  State<MyCartTile> createState() => _MyCartTileState();
-}
-
-class _MyCartTileState extends State<MyCartTile> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Consumer<Restaurant>(
+      builder:
+          (context, restaurant, child) => Container(
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    //food image
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: Image.asset(
+                        cartItem.food.imagePath,
+                        height: 100,
+                        width: 100,
+                      ),
+                    ),
+                    //name and price
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(cartItem.food.name),
+                        Text(cartItem.food.price.toString()),
+                      ],
+                    ),
+
+                    //increment or decrement quantity
+                    MyQuantitySelector(
+                      quantity: cartItem.quantity,
+                      food: cartItem.food,
+                      onIncrement: () {
+                        restaurant.removeFromCart(cartItem);
+                      },
+                      onDecrement: () {
+                        restaurant.addToCart(
+                          cartItem.food,
+                          cartItem.selectedAddons,
+                        );
+                      },
+                    ),
+                  ],
+                ),
+                //addons
+              ],
+            ),
+          ),
+    );
   }
 }

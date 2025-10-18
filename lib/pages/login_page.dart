@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:resto_app/components/my_button.dart';
 import 'package:resto_app/components/my_textfield.dart';
+import 'package:resto_app/pages/navigation.dart';
 
 import 'home_page.dart' show HomePage;
 
@@ -27,14 +28,14 @@ class _LoginPageState extends State<LoginPage> {
     //navigate to the home page
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => HomePage()),
+      MaterialPageRoute(builder: (context) => BottomNav()),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: Center(
         child: Column(
           children: [
